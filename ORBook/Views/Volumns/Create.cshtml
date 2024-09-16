@@ -1,0 +1,32 @@
+﻿@model ORBook.Models.Volumn
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Tạo</h1>
+
+<h4>Tập</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Title" class="control-label"></label>
+                <input asp-for="Title" class="form-control" autofocus/>
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+            <input type="hidden" asp-for="BookId" value="@ViewBag.BookId" class="form-control" />
+            <div class="form-group">
+                <input type="submit" value="Tạo" class="btn btn-primary" /> |
+                <a asp-controller="Books" asp-action="Details" asp-route-id="@ViewBag.BookId">Trở lại</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

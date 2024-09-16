@@ -1,0 +1,54 @@
+﻿@model ORBook.Models.Book
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h1>Xóa</h1>
+
+<h3>Bạn có chắc chắn muốn xóa không?</h3>
+<div>
+    <h4>Sách</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Author)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Author)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.CreatedTime)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.CreatedTime)
+        </dd>
+        <dd class="col-sm-10">
+            @if (Model.BookGenres != null && Model.BookGenres.Any())
+            {
+                foreach (var bookGenre in Model.BookGenres)
+                {
+                    <span class="border border-2 rounded-pill">@bookGenre.Genre.Name</span>
+                }
+            }
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="Id" />
+        <input type="submit" value="Xóa" class="btn btn-danger" /> |
+        <a asp-action="Index">Trở lại</a>
+    </form>
+</div>

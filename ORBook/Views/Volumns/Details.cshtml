@@ -1,0 +1,41 @@
+﻿@using System.Security.Claims
+@model ORBook.Models.Volumn
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Chi tiết</h1>
+
+<div>
+    <h4>Tập</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Title)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Title)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.CreatedTime)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.CreatedTime)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.UpdatedTime)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.UpdatedTime)
+        </dd>
+    </dl>
+</div>
+<div>
+    @if (User.Identity.IsAuthenticated && User.FindFirstValue(ClaimTypes.Role) == "Admin")
+    {
+        <a asp-action="Edit" asp-route-id="@Model?.Id" asp-route-bookId="@ViewBag.BookId">Sửa</a>
+        <span>|</span>
+    }
+    <a asp-controller="Books" asp-action="Details" asp-route-id="@ViewBag.BookId">Trở lại</a>
+</div>

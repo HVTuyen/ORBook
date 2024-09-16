@@ -1,0 +1,128 @@
+﻿@using System.Security.Claims
+@model ORBook.Models.Book
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Chi tiết</h1>
+
+<div>
+    <h4>Sách</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Author)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Author)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.CreatedTime)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.CreatedTime)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.BookGenres)
+        </dt>
+        <dd class="col-sm-10">
+            @if (Model.BookGenres != null && Model.BookGenres.Any())
+            {
+                foreach (var bookGenre in Model.BookGenres)
+                {
+                    @* <span class="border border-2 rounded-pill">@bookGenre.Genre.Name</span> *@
+                    <a class="border border-2 rounded-pill text-decoration-none px-1" asp-controller="Books" asp-action="Index" asp-route-GenreId="@bookGenre.Genre.Id">@bookGenre.Genre.Name</a>
+                }
+            }
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.BookUsers)
+        </dt>
+        <dd class="col-sm-10">
+            <input type="hidden" asp-for="BookUsers" class="form-control" id="bookUserInput" />
+            @{
+                var isFollow = false;
+                if (Model.BookUsers != null && Model.BookUsers.Any())
+                {
+                    foreach (var bookUser in Model.BookUsers)
+                    {
+                        if (User.FindFirstValue(ClaimTypes.Email) == bookUser.User.Email)
+                        {
+                            isFollow = true;
+                        }
+                    }
+                }
+            }
+            
+            <form asp-controller="Users" asp-action="@(isFollow ? "UnFollow" : "Follow")" asp-route-id="@User.FindFirstValue(ClaimTypes.NameIdentifier)" asp-route-bookId="@Model.Id">
+                <input type="submit" value="Theo dõi" class="@(isFollow ? "btn btn-primary" : "btn btn-outline-primary")" />
+            </form>
+        </dd>
+        
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Volumns)
+            @if (User.Identity.IsAuthenticated && User.FindFirstValue(ClaimTypes.Role) == "Admin")
+            {
+                <a asp-controller="Volumns" asp-action="Create" asp-route-bookId="@Model.Id">Tạo tập mới</a>
+            }
+        </dt>
+        <dd class="">
+            @if (Model.Volumns != null && Model.Volumns.Any())
+            {
+                foreach (var volumn in Model.Volumns)
+                {
+                    <div class="d-flex align-items-center">
+                        <div class="border border-2 rounded-pill col-sm-8 my-2">
+                            <a class="mx-4 text-decoration-none"
+                               asp-controller="Volumns"
+                               asp-action="Details"
+                               asp-route-id="@volumn.Id"
+                               asp-route-bookId="@Model.Id">
+                                @volumn.Title
+                            </a>
+                        </div>
+                        @if (User.Identity.IsAuthenticated && User.FindFirstValue(ClaimTypes.Role) == "Admin")
+                        {
+                            <a class="mx-4 text-decoration-none"
+                               asp-controller="Volumns"
+                               asp-action="Edit"
+                               asp-route-id="@volumn.Id"
+                               asp-route-bookId="@Model.Id">
+                                Sửa
+                            </a>
+                            <a class="mx-4 text-decoration-none"
+                               asp-controller="Volumns"
+                               asp-action="Delete"
+                               asp-route-id="@volumn.Id"
+                               asp-route-bookId="@Model.Id">
+                                Xóa
+                            </a>
+                        }
+                        
+                    </div>
+                }
+            }
+        </dd>
+    </dl>
+</div>
+<div>
+    @if (User.Identity.IsAuthenticated && User.FindFirstValue(ClaimTypes.Role) == "Admin")
+    {
+        <a asp-action="Edit" asp-route-id="@Model?.Id">Sửa</a> <span>|</span>
+    }
+    <a asp-action="Index">Trở lại</a>
+</div>
+

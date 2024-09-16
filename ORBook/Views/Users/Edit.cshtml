@@ -1,0 +1,62 @@
+﻿@model ORBook.Models.User
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Sửa</h1>
+
+<h4>Người dùng</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Email" class="control-label"></label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Password" class="control-label"></label>
+                <input type="password" name="Password" value="@Model.Password" class="form-control" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="role" class="control-label"></label>
+                <input type="hidden" asp-for="role" class="form-control" id="roleInput" />
+                <span asp-validation-for="role" class="text-danger"></span>
+            </div>
+            @{
+                var isChecked = Model.role.Equals("Admin") ? "checked" : "";
+            }
+            <input type="checkbox" id="roleCheckbox" @isChecked />
+            <span>Admin</span>
+            <div class="form-group">
+                <input type="submit" value="Lưu" class="btn btn-primary" /> |
+                <a asp-action="Index">Trở lại</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+<script>
+    document.getElementById('roleCheckbox').addEventListener('change', function () {
+        var roleInput = document.getElementById('roleInput');
+        console.log(roleInput)
+        if (this.checked) {
+            roleInput.value = 'Admin';
+        } else {
+            roleInput.value = '';
+        }
+    });
+</script>

@@ -1,0 +1,58 @@
+﻿@model ORBook.Models.ViewModels.BookEditView
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Thêm mới</h1>
+
+<h4>Sách</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Book.Name" class="control-label"></label>
+                <input asp-for="Book.Name" class="form-control" />
+                <span asp-validation-for="Book.Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Book.Description" class="control-label"></label>
+                <input asp-for="Book.Description" class="form-control" />
+                <span asp-validation-for="Book.Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Book.Author" class="control-label"></label>
+                <input asp-for="Book.Author" class="form-control" />
+                <span asp-validation-for="Book.Author" class="text-danger"></span>
+            </div>
+
+            <label asp-for="Book.BookGenres" class="control-label"></label>
+            <div class="form-group d-flex flex-wrap">
+                @foreach (var genre in Model.Genres)
+                {
+                    <div class="col-sm-6">
+                        <input type="checkbox"
+                               id="genre_@genre.Id"
+                               name="SelectedGenreIds"
+                               value="@genre.Id"
+                        />
+                        <label for="genre_@genre.Id">@genre.Name</label>
+                    </div>
+                }
+            </div>
+
+            <span asp-validation-for="SelectedGenreIds" class="text-danger"></span>
+
+            <div class="form-group">
+                <input type="submit" value="Thêm" class="btn btn-primary" /> |
+                <a asp-action="Index">Trở lại</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
